@@ -10,15 +10,18 @@ import projeto.bancario.poo.exception.OperacaoBancariaException;
 import projeto.bancario.poo.exception.QuantiaInvalidaException;
 import projeto.bancario.poo.exception.SaldoInsuficienteException;
 
-public class Conta implements Serializable{
+public abstract class Conta<T> implements Serializable{
 
 	private static final long serialVersonUID = 1L;
 	
 	// Atributos essenciais para uma determinada conta
-	private BigDecimal saldo; // O uso da classe BigDecimal é muito útil para sistemas financeiros
+	private BigDecimal saldo; // O uso da classe BigDecimal é muito útil para sistemas financeiros.
 	private boolean status;
 	private String numeroConta;
-	private LocalDateTime dataConta; // LocalDate
+	private LocalDateTime dataConta; // LocalDateTime serve para definir a data e a hora que a conta foi criada.
+	
+	// Referência de atributo de uma classe generica
+	protected T cliente;
 	
 	// Construtor implícito
 	public Conta() {
