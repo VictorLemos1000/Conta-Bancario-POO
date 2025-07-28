@@ -1,39 +1,32 @@
 package projeto.bancario.poo.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Cliente implements Serializable{
 
-	private String cpf;
+	private static final long serialVersionUID = 1L;
+	
+	// Atributos necessário para a classe de um determinado cliente
 	private String nome;
+	private String cpf;
 	
-	private ArrayList<Cliente> clientes = new ArrayList<>();
+	private ArrayList<Conta> contas = new ArrayList<>();
 	
-	public Cliente(String cpf, String nome) {
-		this.cpf = cpf;
+	// Construtor implícito
+	public Cliente() {
+		
+	}
+	
+	// Construtor explícito
+	public Cliente(String nome, String cpf) {
 		this.nome = nome;
-	}
-	
-	public void acicionarCliente(Cliente conta) {
-		if (this.clientes.contains(conta)) {
-			clientes.add(conta);
-		} else {
-
-		}
-	}
-	
-	
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
 		this.cpf = cpf;
+		this.contas = new ArrayList<Conta>();
 	}
-
+	
+	// Métodos geter e seters dos tributos
 	public String getNome() {
 		return nome;
 	}
@@ -42,24 +35,46 @@ public class Cliente implements Serializable{
 		this.nome = nome;
 	}
 
-	public ArrayList<Cliente> getClientes() {
-		return clientes;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public void setClientes(ArrayList<Cliente> clientes) {
-		this.clientes = clientes;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
+	public ArrayList<Conta> getContas() {
+		return contas;
+	}
+
+	public void setContas(ArrayList<Conta> contas) {
+		this.contas = contas;
+	}
+
+	/*
+	 * O método toString ele evita que o programa exiba uma hash
+	 * para um usuário, mas ao invés disso ele aplica extamente o
+	 * valor de cada atributo.
+	 */
 	@Override
 	public String toString() {
-		return "Cliente [cpf=" + this.cpf + ", nome=" + this.nome + ", clientes=" + this.clientes + "]";
+		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", contas=" + contas + "]";
 	}
 
+	/*
+	 * O método hashCode cria um número único baseado no valor do objeto;
+	 * ou seja um valor único para o objeto, por exemplo um cpf, mas neste
+	 * contexto de classe um número para uma determinada conta.
+	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.cpf);
+		return Objects.hash(cpf);
 	}
 
+	/*
+	 * O método equals serve para comparar se 2 objetos são iguais,
+	 * mas dentro da menmória.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -69,7 +84,6 @@ public class Cliente implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		return Objects.equals(this.cpf, other.cpf);
+		return Objects.equals(cpf, other.cpf);
 	}
-	
 }

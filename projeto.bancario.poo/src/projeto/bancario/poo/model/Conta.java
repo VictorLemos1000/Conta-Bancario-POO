@@ -5,46 +5,91 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import projeto.bancario.poo.exception.ContaInativaException;
+import projeto.bancario.poo.exception.OperacaoBancariaException;
+import projeto.bancario.poo.exception.QuantiaInvalidaException;
+import projeto.bancario.poo.exception.SaldoInsuficienteException;
+
 public class Conta implements Serializable{
 
-	// Atributos que compoẽ o cenário realizado
-	private BigDecimal saldo;
+	private static final long serialVersonUID = 1L;
+	
+	// Atributos essenciais para uma determinada conta
+	private BigDecimal saldo; // O uso da classe BigDecimal é muito útil para sistemas financeiros
 	private boolean status;
 	private String numeroConta;
-	private LocalDateTime dataConta;
+	private LocalDateTime dataConta; // LocalDate
 	
-	// Método construtor explícito para 
+	// Construtor implícito
+	public Conta() {
+		this.saldo =  BigDecimal.ZERO;
+		this.status = true; // Conta ativa por padrão
+		this.dataConta = LocalDateTime.now();
+	}
+
+	// Construtor explícito
 	public Conta(BigDecimal saldo, boolean status, String numeroConta, LocalDateTime dataConta) {
 		this.saldo = saldo;
-		this.status = true;
+		this.status = status;
 		this.numeroConta = numeroConta;
 		this.dataConta = dataConta;
 	}
-
-	public void sacarQuantia(BigDecimal quantia) {
-		if (this.status && this.saldo.compareTo(quantia) >= 1) {
-			this.saldo = saldo.subtract(quantia);
-		} else {
-			throw new IllegalArgumentException(" Saldo insuficiente para realização de saque.");
+	
+	/*
+	 * O método criado ele vai realizar seguinte ação de validade da 
+	 * quantia se é nula, se está zerada ou está inativa para os demais
+	 * métodos composto na classe Conta que são depositar, sacar e transferir.
+	 */
+	public void validacaoOperacional(BigDecimal quantia) throws OperacaoBancariaException {
+		if (quantia == null) {
+			throw new QuantiaInvalidaException("\n A quantia não pode ser nula.");
+		}
+		
+		if (quantia.compareTo(BigDecimal.ZERO) <= 0) {
+			throw new QuantiaInvalidaException("\n A quantia do saldo deve ser maior que R$0,00.");
+		}
+		
+		if (!this.isStatus()) {
+			throw new ContaInativaException("\n A conta está inativa.");
 		}
 	}
 	
-	public void despositarQuantia(BigDecimal quantia) {
-		if (this.status && this.saldo.compareTo(quantia) <= 0) {
-			this.saldo = saldo.add(quantia);
-		} else {
-			throw new IllegalArgumentException(" Saldo insuficiente para realização de deposito.");
-		}
+	// Método de deposito da conta.
+	public void depositarQuantia(BigDecimal quantia) throws OperacaoBancariaException{
+		validacaoOperacional(quantia);
+		
+		this.saldo = this.saldo.add(quantia);
 	}
 	
-	public void transferirQuantia(BigDecimal quantia) {
-		if (this.status) {
-			
-		} else {
-
+	// Método para retirada de quntia da conta.
+	public void sacarQuantia(BigDecimal quantia) throws OperacaoBancariaException {
+		validacaoOperacional(quantia);
+		
+		if (this.saldo.compareTo(quantia) < 0) {			
+			throw new  SaldoInsuficienteException("\n Saque insuficiente para saque.");
 		}
+		
+		this.saldo = saldo.subtract(quantia);
 	}
 
+	// Método para tranferência de determinada quantia de uma conta bancaria.
+	public void tranferirQuantia(Conta contaDestino, BigDecimal quntia) throws OperacaoBancariaException {
+		validacaoOperacional(quntia);
+		
+		if (!contaDestino.isStatus()) {
+			throw new ContaInativaException("\n Sua conta destino está inativa.");
+		}
+		
+		/* O método de saque está referenciando a realização de uma transferencia da
+		 * conta de origem.
+		 */
+		this.sacarQuantia(quntia);
+		
+		// O método de deposito está realizando uma ação da conta de destino.
+		contaDestino.depositarQuantia(quntia);
+	}
+	
+	// Métodos geters e seters.
 	public BigDecimal getSaldo() {
 		return saldo;
 	}
@@ -53,6 +98,7 @@ public class Conta implements Serializable{
 		this.saldo = saldo;
 	}
 
+	// Método importante para verificar se a conta está ativa ou inativa.
 	public boolean isStatus() {
 		return status;
 	}
@@ -77,17 +123,36 @@ public class Conta implements Serializable{
 		this.dataConta = dataConta;
 	}
 
+	// Método de instaicação de classe
+	public static long getSerialversonuid() {
+		return serialVersonUID;
+	}
+
+	/*
+	 * O método toString ele evita que o programa exiba uma hash
+	 * para um usuário, mas ao invés disso ele aplica extamente o
+	 * valor de cada atributo.
+	 */
 	@Override
 	public String toString() {
-		return "Conta [saldo=" + this.saldo + ", status=" + this.status + ", numeroConta=" + this.numeroConta + ", dataConta="
-				+ this.dataConta + "]";
+		return "Conta [saldo=" + saldo + ", status=" + status + ", numeroConta=" + numeroConta + ", dataConta="
+				+ dataConta + "]";
 	}
 
+	/*
+	 * O método hashCode cria um número único baseado no valor do objeto;
+	 * ou seja um valor único para o objeto, por exemplo um id, mas neste
+	 * contexto de classe um número para uma determinada conta.
+	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.numeroConta);
+		return Objects.hash(numeroConta);
 	}
 
+	/*
+	 * O método equals serve para comparar se 2 objetos são iguais,
+	 * mas dentro da menmória.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -97,9 +162,6 @@ public class Conta implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Conta other = (Conta) obj;
-		return Objects.equals(this.numeroConta, other.numeroConta);
+		return Objects.equals(numeroConta, other.numeroConta);
 	}
-	
-	
-	
 }
