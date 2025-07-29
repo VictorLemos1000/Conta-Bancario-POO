@@ -2,9 +2,14 @@ package projeto.bancario.poo.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class Cliente implements Serializable{
+import projeto.bancario.poo.exception.ContaNaoEncontradaException;
+
+// O tipo genérico T generaliza o tipo que será definido posteriormente.
+// No contexto geral o genérics ele é muito utilizados para coleções como List, Set, Map etc.
+public class Cliente<T> implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -12,7 +17,10 @@ public class Cliente implements Serializable{
 	private String nome;
 	private String cpf;
 	
-	private ArrayList<Conta> contas = new ArrayList<>();
+	private List<Conta<?>> contas = new ArrayList<>();
+	
+	// Referência de atributo de uma classe generica
+	protected T titular;
 	
 	// Construtor implícito
 	public Cliente() {
@@ -23,7 +31,35 @@ public class Cliente implements Serializable{
 	public Cliente(String nome, String cpf) {
 		this.nome = nome;
 		this.cpf = cpf;
-		this.contas = new ArrayList<Conta>();
+		this.contas = new ArrayList<Conta<?>>();
+	}
+	
+	/*
+	 * Caso a conta do usuário seja nula vai adicionado uma a conta ao arrayList de contas
+	 */
+	public void adicionarCliente(Conta<?> conta) {
+		if (conta == null) {
+			throw new IllegalArgumentException("\n A sua conta não pode ser nula.");
+		}
+		
+		this.contas.add(conta);
+	}
+	
+	public boolean removerCliente(String numeroConta) {
+		return this.contas.removeIf(conta -> conta.getNumeroConta().equals(numeroConta));
+	}
+	
+	public <T extends Conta<?>> T localizarCliente(String numeroConta, Class<T> tipoConta) throws ContaNaoEncontradaException{
+		
+		for (Conta<?> conta : contas) {
+			if (conta.getNumeroConta().equals(numeroConta)) {
+				if (tipoConta.isInstance(conta)) {
+					return tipoConta.cast(conta);
+				}
+				throw new ContaNaoEncontradaException("\n O tipo conta é imcompatível.");
+			}
+		}
+		throw new ContaNaoEncontradaException("\n Sua conta não foi encontrada.");
 	}
 	
 	// Métodos geter e seters dos tributos
@@ -43,11 +79,11 @@ public class Cliente implements Serializable{
 		this.cpf = cpf;
 	}
 
-	public ArrayList<Conta> getContas() {
+	public List<Conta<?>> getContas() {
 		return contas;
 	}
 
-	public void setContas(ArrayList<Conta> contas) {
+	public void setContas(List<Conta<?>> contas) {
 		this.contas = contas;
 	}
 

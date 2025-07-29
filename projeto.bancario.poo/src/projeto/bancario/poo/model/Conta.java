@@ -10,7 +10,15 @@ import projeto.bancario.poo.exception.OperacaoBancariaException;
 import projeto.bancario.poo.exception.QuantiaInvalidaException;
 import projeto.bancario.poo.exception.SaldoInsuficienteException;
 
-public abstract class Conta<T> implements Serializable{
+/*
+ * A classe conta ela está utilizando a propriedade generics que
+ * permite classes, interfaces, métodos que trabalham de forma parametrizada.
+ * 
+ * Utilizar esta propriedade indica evitar erros de CastClassExcetion
+ * e reutiliza códigos de uma única classe ou método que funcionam com
+ * diversas tipagens.
+ */
+public class Conta<T extends Cliente> implements Serializable{
 
 	private static final long serialVersonUID = 1L;
 	
@@ -71,7 +79,6 @@ public abstract class Conta<T> implements Serializable{
 		if (this.saldo.compareTo(quantia) < 0) {			
 			throw new  SaldoInsuficienteException("\n Saque insuficiente para saque.");
 		}
-		
 		this.saldo = saldo.subtract(quantia);
 	}
 
