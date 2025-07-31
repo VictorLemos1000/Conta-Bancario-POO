@@ -34,6 +34,14 @@ public class ContaCorrente extends Conta{
 		System.out.printf("\n Operação: %s | Quantia: R$%.2f%n", descricao, valor);
 	}
 	
+	/*
+	 * OBS: a classe Function ela é uma interface funcional que representa;
+	 * tipos genéricos do "T" para receber argumentos e do tipo "R" para retornar
+	 * um resultado de outro tipo.
+	 * 
+	 * No caso em questão ele está atuando para os atributos
+	 * quantiaComTaxaAdministrativa e limiteTotal como classes do tipo BigDecimal.
+	 */
 	public Function<BigDecimal, BigDecimal> usarChequeEspecial(String operacao) {
 		return valor -> {
 			// A taxa de 1.03 é equivalente a 3%
@@ -41,10 +49,9 @@ public class ContaCorrente extends Conta{
 			BigDecimal limiteTotal = this.getSaldo().add(limiteChequeEspecial);
 			
 			if (quantiaComTaxaAdministrativa.compareTo(limiteTotal) > 0) {
-				throw new SaldoInsuficienteException(
-						String.format("\n Limite de cheque especial excedido. Disponível: R$%.2f", limiteTotal)
-						);
+				throw new SaldoInsuficienteException(String.format("\n Limite de cheque especial excedido. Disponível: R$%.2f", limiteTotal));
 			}
+			
 			this.getSaldo().subtract(quantiaComTaxaAdministrativa);
 			registroOperacional(operacao, quantiaComTaxaAdministrativa.negate());
 			return this.getSaldo();
@@ -67,6 +74,7 @@ public class ContaCorrente extends Conta{
 		};
 	}
 
+	// Geters e Seters
 	public BigDecimal getLimiteChequeEspecial() {
 		return limiteChequeEspecial;
 	}

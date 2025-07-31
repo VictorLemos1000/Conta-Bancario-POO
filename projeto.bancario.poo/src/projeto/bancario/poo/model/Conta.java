@@ -2,13 +2,17 @@ package projeto.bancario.poo.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import projeto.bancario.poo.exception.ContaInativaException;
 import projeto.bancario.poo.exception.OperacaoBancariaException;
 import projeto.bancario.poo.exception.QuantiaInvalidaException;
 import projeto.bancario.poo.exception.SaldoInsuficienteException;
+import projeto.bancario.poo.pojo.Transacao;
 
 /*
  * A classe conta ela está utilizando a propriedade generics que
@@ -17,33 +21,55 @@ import projeto.bancario.poo.exception.SaldoInsuficienteException;
  * Utilizar esta propriedade indica evitar erros de CastClassExcetion
  * e reutiliza códigos de uma única classe ou método que funcionam com
  * diversas tipagens.
+ * 
+ * Após mais uma vez pesquisar entendi para que realmente serve generics apenas
+ * para flexiblidade de tipos variados.
+ * 
+ * A classe pai Conta após ter se tornado abstrata ela não pode de forma alguma
+ * instanciada apenas é uma base para classes filhas que neste cenário são elas
+ * classes ContaPoupanca e ContaCorrente.
+ * 
+ * Outro topico importante salientar a classe pai Conta també conhecida como Superclasse;
  */
-public class Conta<T extends Cliente> implements Serializable{
+public abstract class Conta<T extends Cliente> implements Serializable{
 
 	private static final long serialVersonUID = 1L;
 	
 	// Atributos essenciais para uma determinada conta
-	private BigDecimal saldo; // O uso da classe BigDecimal é muito útil para sistemas financeiros.
+	/*
+	 * Os dois seguintes atributos de saldo e numeroConta estão
+	 * com modificadores de acesso protected devido a seus tratamento
+	 * de 2 classes que vão herdar suas propriedades para manipulação da
+	 * regra de negócio.
+	 * 
+	 * 
+	 * Especificação da herança este 2 atributos vão ser tratados nas
+	 * classes ContaPoupanca e COntaCorrente
+	 */
+	protected BigDecimal saldo; // O uso da classe BigDecimal é muito útil para sistemas financeiros.
+	protected String numeroConta;
+	
 	private boolean status;
-	private String numeroConta;
 	private LocalDateTime dataConta; // LocalDateTime serve para definir a data e a hora que a conta foi criada.
+	
+	private List<Transacao> listaDeTransacao = new ArrayList<Transacao>();
 	
 	// Referência de atributo de uma classe generica
 	protected T cliente;
 	
 	// Construtor implícito
 	public Conta() {
-		this.saldo =  BigDecimal.ZERO;
-		this.status = true; // Conta ativa por padrão
-		this.dataConta = LocalDateTime.now();
+//		this.saldo =  BigDecimal.ZERO;
+//		this.status = true; // Conta ativa por padrão
+//		this.dataConta = LocalDateTime.now();
 	}
 
 	// Construtor explícito
 	public Conta(BigDecimal saldo, boolean status, String numeroConta, LocalDateTime dataConta) {
-		this.saldo = saldo;
-		this.status = status;
+		this.saldo = BigDecimal.ZERO;
+		this.status = true;
 		this.numeroConta = numeroConta;
-		this.dataConta = dataConta;
+		this.dataConta = LocalDateTime.now();
 	}
 	
 	/*
@@ -136,6 +162,14 @@ public class Conta<T extends Cliente> implements Serializable{
 	// Método de instaicação de classe
 	public static long getSerialversonuid() {
 		return serialVersonUID;
+	}
+
+	public List<Transacao> getListaDeTransacao() {
+		return listaDeTransacao;
+	}
+
+	public void setListaDeTransacao(List<Transacao> listaDeTransacao) {
+		this.listaDeTransacao = listaDeTransacao;
 	}
 
 	/*

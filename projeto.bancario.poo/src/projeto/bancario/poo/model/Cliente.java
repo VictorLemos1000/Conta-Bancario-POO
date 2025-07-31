@@ -16,6 +16,7 @@ public class Cliente<T> implements Serializable{
 	// Atributos necessário para a classe de um determinado cliente
 	private String nome;
 	private String cpf;
+	private String endereco;
 	
 	private List<Conta<?>> contas = new ArrayList<>();
 	
@@ -28,9 +29,10 @@ public class Cliente<T> implements Serializable{
 	}
 	
 	// Construtor explícito
-	public Cliente(String nome, String cpf) {
+	public Cliente(String nome, String cpf, String endereco) {
 		this.nome = nome;
 		this.cpf = cpf;
+		this.endereco = endereco;
 		this.contas = new ArrayList<Conta<?>>();
 	}
 	
@@ -86,6 +88,28 @@ public class Cliente<T> implements Serializable{
 	public void setContas(List<Conta<?>> contas) {
 		this.contas = contas;
 	}
+	
+	
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+
+	public T getTitular() {
+		return titular;
+	}
+
+	public void setTitular(T titular) {
+		this.titular = titular;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	/*
 	 * O método toString ele evita que o programa exiba uma hash
@@ -94,8 +118,9 @@ public class Cliente<T> implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", contas=" + contas + "]";
-	}
+		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", endereco=" + endereco + ", contas=" + contas + ", titular="
+				+ titular + "]";
+	}	
 
 	/*
 	 * O método hashCode cria um número único baseado no valor do objeto;
