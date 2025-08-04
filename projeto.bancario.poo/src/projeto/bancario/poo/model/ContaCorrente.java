@@ -8,6 +8,7 @@ import java.util.function.Function;
 import projeto.bancario.poo.exception.SaldoInsuficienteException;
 
 //  Conta poupança está herdando a classe pai genérica Conta vinculada ao cliente
+@SuppressWarnings({ "serial", "rawtypes" })
 public class ContaCorrente extends Conta{
 
 	private BigDecimal limiteChequeEspecial;
@@ -16,13 +17,14 @@ public class ContaCorrente extends Conta{
 	
 	// Método implícito.
 	public ContaCorrente() {
-		super();
+		
 	}
 	
 	// Método explícito.
+	@SuppressWarnings("unchecked")
 	public ContaCorrente(String numeroConta, BigDecimal saldoInicial, BigDecimal limiteChequeEspecial, BigDecimal taxaDeManutencao) {
 		super();
-		numeroConta = numeroConta;
+		this.numeroConta = numeroConta;
 		saldoInicial = saldoInicial;
 		this.limiteChequeEspecial = limiteChequeEspecial.setScale(2, RoundingMode.HALF_EVEN);
 		this.taxaDeManutencao = taxaDeManutencao.setScale(2, RoundingMode.HALF_EVEN);
@@ -97,5 +99,11 @@ public class ContaCorrente extends Conta{
 
 	public void setUltimaCobrancaDeManutencao(LocalDate ultimaCobrancaDeManutencao) {
 		this.ultimaCobrancaDeManutencao = ultimaCobrancaDeManutencao;
+	}
+
+	//
+	public void setCliente(Cliente<?> cliente) {
+		// TODO Auto-generated method stub
+		
 	}
 }

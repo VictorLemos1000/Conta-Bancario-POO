@@ -51,6 +51,7 @@ public class Cliente<T> implements Serializable{
 		return this.contas.removeIf(conta -> conta.getNumeroConta().equals(numeroConta));
 	}
 	
+	@SuppressWarnings("hiding")
 	public <T extends Conta<?>> T localizarCliente(String numeroConta, Class<T> tipoConta) throws ContaNaoEncontradaException{
 		
 		for (Conta<?> conta : contas) {
@@ -136,6 +137,7 @@ public class Cliente<T> implements Serializable{
 	 * O método equals serve para comparar se 2 objetos são iguais,
 	 * mas dentro da menmória.
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

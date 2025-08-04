@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
-public class ContaPoupanca extends Conta<Cliente>{
+public class ContaPoupanca extends Conta{
 
 	private BigDecimal taxaRendimento;
 	private LocalDate dataAniversario;
@@ -45,5 +45,10 @@ public class ContaPoupanca extends Conta<Cliente>{
 
 	public void setTaxaRendimento(BigDecimal taxaRendimento) {
 		this.taxaRendimento = taxaRendimento;
+	}
+
+	public void setCliente(Cliente cliente) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -31,6 +31,7 @@ import projeto.bancario.poo.pojo.Transacao;
  * 
  * Outro topico importante salientar a classe pai Conta també conhecida como Superclasse;
  */
+@SuppressWarnings("unused")
 public abstract class Conta<T extends Cliente> implements Serializable{
 
 	private static final long serialVersonUID = 1L;
@@ -41,7 +42,6 @@ public abstract class Conta<T extends Cliente> implements Serializable{
 	 * com modificadores de acesso protected devido a seus tratamento
 	 * de 2 classes que vão herdar suas propriedades para manipulação da
 	 * regra de negócio.
-	 * 
 	 * 
 	 * Especificação da herança este 2 atributos vão ser tratados nas
 	 * classes ContaPoupanca e COntaCorrente
@@ -55,7 +55,7 @@ public abstract class Conta<T extends Cliente> implements Serializable{
 	private List<Transacao> listaDeTransacao = new ArrayList<Transacao>();
 	
 	// Referência de atributo de uma classe generica
-	protected T cliente;
+//	protected T cliente;
 	
 	// Construtor implícito
 	public Conta() {
@@ -109,6 +109,7 @@ public abstract class Conta<T extends Cliente> implements Serializable{
 	}
 
 	// Método para tranferência de determinada quantia de uma conta bancaria.
+	@SuppressWarnings("rawtypes")
 	public void tranferirQuantia(Conta contaDestino, BigDecimal quntia) throws OperacaoBancariaException {
 		validacaoOperacional(quntia);
 		
@@ -125,7 +126,7 @@ public abstract class Conta<T extends Cliente> implements Serializable{
 		contaDestino.depositarQuantia(quntia);
 	}
 	
-	// Métodos geters e seters.
+	// Métodos geters e seters servem para atribuir e retornar valores a seus respectivos atributos.
 	public BigDecimal getSaldo() {
 		return saldo;
 	}
