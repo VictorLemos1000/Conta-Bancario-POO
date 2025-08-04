@@ -17,8 +17,8 @@ import projeto.bancario.poo.model.Conta;
 import projeto.bancario.poo.model.ContaCorrente;
 import projeto.bancario.poo.model.ContaPoupanca;
 
-@SuppressWarnings("unused")
-public class ContaService {
+@SuppressWarnings({ "unused", "rawtypes", "serial" })
+public class ContaService extends Conta{
 
 	private List<Conta<?>> contas;
 	
@@ -37,8 +37,7 @@ public class ContaService {
 	}
 	
 	// Criação de uma conta corrente.
-	@SuppressWarnings("rawtypes")
-	private ContaCorrente criarContaCorrente(Cliente cliente, String numeroConta, BigDecimal saldoInicial, BigDecimal limiteChequeEspecial, BigDecimal taxaManutencao) {
+	public ContaCorrente criarContaCorrente(Cliente cliente, String numeroConta, BigDecimal saldoInicial, BigDecimal limiteChequeEspecial, BigDecimal taxaManutencao) {
 		// TODO Auto-generated method stub
 		ContaCorrente novaContaCorrente = new ContaCorrente(numeroConta, saldoInicial, limiteChequeEspecial, taxaManutencao);
 		novaContaCorrente.setCliente(cliente);
@@ -47,7 +46,7 @@ public class ContaService {
 	}
 	
 	// Criação de uma conta poupança.
-	private ContaPoupanca criarContaPoupanca(Cliente<?> cliente, String numeroConta, BigDecimal saldoInicial, BigDecimal taxaRendimento) {
+	public ContaPoupanca criarContaPoupanca(Cliente<?> cliente, String numeroConta, BigDecimal saldoInicial, BigDecimal taxaRendimento) {
 		// TODO Auto-generated method stub
 		ContaPoupanca novaContaPoupanca = new ContaPoupanca(numeroConta, saldoInicial, taxaRendimento);
 		novaContaPoupanca.setCliente(cliente);
@@ -76,13 +75,13 @@ public class ContaService {
 		conta.depositarQuantia(quantia);
 	}
 	
-	private void sacar(String numeroConta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException{
+	public void sacar(String numeroConta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException{
 		// TODO Auto-generated method stub
 		Conta<?> conta = encontrarConta(numeroConta);
 		conta.sacarQuantia(quantia);
 	}
 	
-	private void transferir(String contaOrigem, String contaDestino, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException {
+	public void transferir(String contaOrigem, String contaDestino, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException {
 		// TODO Auto-generated method stub
 		Conta<?> origem = encontrarConta(contaOrigem);
 		Conta<?> destino = encontrarConta(contaDestino);
@@ -94,7 +93,7 @@ public class ContaService {
 		return new ArrayList<Conta<?>>(contas);
 	}
 	
-	private void aplicarRendimentoContaPoupanca() {
+	public void aplicarRendimentoContaPoupanca() {
 		// TODO Auto-generated method stub
 		if (contas == null || contas.isEmpty()) {
 			System.out.println(" Nenhuma conta cadastrada para aplicar rendimento.");
@@ -125,15 +124,50 @@ public class ContaService {
 		System.out.println(" Rendimento aplicado em " + contasProcessadas + " conta(s) poupança.");
 	}
 	
-	private void desativarConta(String numeroConta) throws ContaNaoEncontradaException {
+	public void desativarConta(String numeroConta) throws ContaNaoEncontradaException {
 		// TODO Auto-generated method stub
 		Conta<?> conta = encontrarConta(numeroConta);
 		conta.setStatus(false);
 	}
 	
-	private void ativarConta(String numeroConta) throws ContaNaoEncontradaException {
+	public void ativarConta(String numeroConta) throws ContaNaoEncontradaException {
 		// TODO Auto-generated method stub
 		Conta<?> conta = encontrarConta(numeroConta);
 		conta.setStatus(true);
+	}
+	
+	// Métodos inerentes a conta corrente.
+	public void usarChequeEspecial(String numeroConta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException{
+		// TODO Auto-generated method stub
+		Conta<?> conta = encontrarConta(numeroConta);
+		
+		if (!(conta instanceof ContaCorrente)) {
+			throw new OperacaoBancariaException(" Operação apenas é válida para contas correntes.");
+		}
+		
+		ContaCorrente contaCorrente = (ContaCorrente) conta;
+		contaCorrente.usarChequeEspecial(" Uso do cheque especial.").apply(quantia);
+	}
+	
+	public void cobrarTaxaManutencao(String numeroConta) throws OperacaoBancariaException, ContaNaoEncontradaException {
+		// TODO Auto-generated method stub
+		Conta<?> conta = encontrarConta(numeroConta);
+		
+		if (!(conta instanceof ContaCorrente)) {
+			throw new OperacaoBancariaException(" Operação apenas é válida para contas correntes.");
+		}
+		
+		ContaCorrente contaCorrente = (ContaCorrente) conta;
+		contaCorrente.cobrarTaxaDeManutancao(LocalDate.now()).run();
+	}
+	
+	public BigDecimal consultarLimiteChequeEspecial(String numeroConta) throws ContaNaoEncontradaException {
+		// TODO Auto-generated method stub
+		Conta<?> conta = encontrarConta(numeroConta);
+		
+		if (!(conta instanceof ContaCorrente)) {
+			return ((ContaCorrente) conta).getLimiteChequeEspecial();
+		}
+		return BigDecimal.ZERO;
 	}
 }

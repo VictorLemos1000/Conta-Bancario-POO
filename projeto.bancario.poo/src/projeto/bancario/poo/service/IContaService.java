@@ -14,18 +14,14 @@ public interface IContaService {
 
     // Operações básicas
     void depositar(String numeroConta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
-    
     void sacar(String numeroConta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
-    
     void transferir(String contaOrigem, String contaDestino, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
     
     // Gerenciamento de contas
-    ContaCorrente criarContaCorrente(Cliente cliente, String numeroConta, BigDecimal saldoInicial, BigDecimal limiteChequeEspecial, BigDecimal taxaManutencao);
-    
+    ContaCorrente criarContaCorrente(Cliente<?> cliente, String numeroConta, BigDecimal saldoInicial, BigDecimal limiteChequeEspecial, BigDecimal taxaManutencao);
     ContaPoupanca criarContaPoupanca(Cliente<?> cliente, String numeroConta, BigDecimal saldoInicial, BigDecimal taxaRendimento);
     
     void ativarConta(String numeroConta) throws ContaNaoEncontradaException;
-    
     void desativarConta(String numeroConta) throws ContaNaoEncontradaException;
     
     // Consultas
@@ -35,4 +31,8 @@ public interface IContaService {
     
     // Operações específicas
     void aplicarRendimentoContaPoupanca();
+    
+    public void usarChequeEspecial(String numeroConta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
+    public void cobrarTaxaManutencao(String numeroConta) throws OperacaoBancariaException, ContaNaoEncontradaException;
+    public BigDecimal consultarLimiteChequeEspecial(String numeroConta) throws ContaNaoEncontradaException;
 }
