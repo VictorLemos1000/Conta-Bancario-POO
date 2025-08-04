@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
+@SuppressWarnings({ "rawtypes", "serial" })
 public class ContaPoupanca extends Conta{
 
 	private BigDecimal taxaRendimento;
@@ -47,6 +48,7 @@ public class ContaPoupanca extends Conta{
 		this.taxaRendimento = taxaRendimento;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setCliente(Cliente cliente) {
 		// TODO Auto-generated method stub
 		
