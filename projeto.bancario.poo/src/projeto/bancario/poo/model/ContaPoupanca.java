@@ -11,7 +11,6 @@ public class ContaPoupanca extends Conta{
 	private LocalDate dataAniversario;
 	
 	public ContaPoupanca(String numeroConta, BigDecimal saldoInicial, BigDecimal taxaRendimento) {
-		numeroConta = numeroConta;
 		saldoInicial = saldoInicial.setScale(2, RoundingMode.HALF_EVEN);	
 		
 		/*
@@ -48,7 +47,6 @@ public class ContaPoupanca extends Conta{
 		this.taxaRendimento = taxaRendimento;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void setCliente(Cliente cliente) {
 		// TODO Auto-generated method stub
 		

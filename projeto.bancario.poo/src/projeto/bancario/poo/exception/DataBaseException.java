@@ -1,0 +1,10 @@
+package projeto.bancario.poo.exception;
+
+@SuppressWarnings("serial")
+public class DataBaseException extends RuntimeException {
+
+	public DataBaseException(String msg, Throwable causa) {
+		// TODO Auto-generated constructor stub
+		super(msg, causa);
+	}
+}
