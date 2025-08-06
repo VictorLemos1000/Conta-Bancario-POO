@@ -32,7 +32,7 @@ import projeto.bancario.poo.pojo.Transacao;
  * Outro topico importante salientar a classe pai Conta també conhecida como Superclasse;
  */
 @SuppressWarnings("unused")
-public abstract class Conta<T extends Cliente> implements Serializable{
+public  class Conta<T extends Cliente> implements Serializable{
 
 	private static final long serialVersonUID = 1L;
 	

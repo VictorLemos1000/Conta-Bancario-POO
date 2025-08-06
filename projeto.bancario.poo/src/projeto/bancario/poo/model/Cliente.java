@@ -14,6 +14,7 @@ public class Cliente<T> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	// Atributos necessário para a classe de um determinado cliente
+	private long id;
 	private String nome;
 	private String cpf;
 	private String endereco;
@@ -110,6 +111,14 @@ public class Cliente<T> implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	/*

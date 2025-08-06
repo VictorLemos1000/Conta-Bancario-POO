@@ -56,6 +56,11 @@ public class DataBaseConnectionMySQL implements IConnection{
 		}
 	}
 	
+	public Connection getConnection() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Override
 	public void closeConnection() {
 		// TODO Auto-generated method stub
@@ -152,4 +157,5 @@ public class DataBaseConnectionMySQL implements IConnection{
 			e.printStackTrace();
 		}
 	}
+
 }

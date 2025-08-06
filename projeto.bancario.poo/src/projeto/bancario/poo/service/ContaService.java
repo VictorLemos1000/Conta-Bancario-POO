@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import projeto.bancario.poo.dao.ContaDAO;
 //Imports de exceções
 import projeto.bancario.poo.exception.ContaInativaException;
 import projeto.bancario.poo.exception.ContaNaoEncontradaException;
@@ -21,11 +22,13 @@ import projeto.bancario.poo.model.ContaPoupanca;
 public class ContaService extends Conta{
 
 	private List<Conta<?>> contas;
+	private final ContaDAO contaDAO;
 	
 	// Método implícito
 	public ContaService() {
 		// TODO Auto-generated constructor stub
 		this.contas = new ArrayList<>();
+		this.contaDAO = new ContaDAO();
 	}
 
 	public List<Conta<?>> getContas() {

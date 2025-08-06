@@ -11,6 +11,7 @@ import projeto.bancario.poo.exception.SaldoInsuficienteException;
 @SuppressWarnings({ "serial", "rawtypes" })
 public class ContaCorrente extends Conta{
 
+	private long id;
 	private BigDecimal limiteChequeEspecial;
 	private BigDecimal taxaDeManutencao;
 	private LocalDate ultimaCobrancaDeManutencao;
@@ -100,10 +101,20 @@ public class ContaCorrente extends Conta{
 	public void setUltimaCobrancaDeManutencao(LocalDate ultimaCobrancaDeManutencao) {
 		this.ultimaCobrancaDeManutencao = ultimaCobrancaDeManutencao;
 	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	//
 	public void setCliente(Cliente<?> cliente) {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 }

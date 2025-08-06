@@ -5,8 +5,9 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @SuppressWarnings({ "rawtypes", "serial" })
-public class ContaPoupanca extends Conta{
+public class ContaPoupanca extends Conta {
 
+	private long id;
 	private BigDecimal taxaRendimento;
 	private LocalDate dataAniversario;
 	
@@ -45,6 +46,14 @@ public class ContaPoupanca extends Conta{
 
 	public void setTaxaRendimento(BigDecimal taxaRendimento) {
 		this.taxaRendimento = taxaRendimento;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public void setCliente(Cliente cliente) {
