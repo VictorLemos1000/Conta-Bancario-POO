@@ -15,7 +15,7 @@ import projeto.bancario.poo.model.ContaCorrente;
 import projeto.bancario.poo.model.ContaPoupanca;
 
 @SuppressWarnings("rawtypes")
-public class ContaPoupancaService implements IContaService{
+public class ContaPoupancaService implements IContaService {
 
 	@Override
 	public void sacarQuantia(Conta conta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException {

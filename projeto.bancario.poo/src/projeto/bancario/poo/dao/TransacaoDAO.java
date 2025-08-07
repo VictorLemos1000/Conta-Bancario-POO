@@ -1,6 +1,5 @@
 package projeto.bancario.poo.dao;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -27,8 +26,8 @@ public class TransacaoDAO implements IEndityDAO<Transacao>{
 		try (Connection connection = DB.getConnection(); PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
        
 			pstm.setDate(1, Date.valueOf(transacao.getData().toLocalDate()));
-//			pstm.setBigDecimal(2, transacao.getValor());
-//			pstm.setInt(3, transacao.getTipo().getValue());
+			pstm.setBigDecimal(2, transacao.getValor());
+			pstm.setInt(3, transacao.getTipo().getValue());
 			pstm.setString(4, transacao.getContaOrigem() != null ? transacao.getContaOrigem().getNumeroConta() : null);
 			pstm.setString(5, transacao.getContaDestino() != null ? transacao.getContaDestino().getNumeroConta() : null);
        
@@ -69,8 +68,8 @@ public class TransacaoDAO implements IEndityDAO<Transacao>{
 		try (Connection connection = DB.getConnection(); PreparedStatement pstm = connection.prepareStatement(sql)) {
        
 			pstm.setDate(1, Date.valueOf(transacao.getData().toLocalDate()));
-//			pstm.setBigDecimal(2, transacao.getValor());
-//			pstm.setInt(3, transacao.getTipo().getValue());
+			pstm.setBigDecimal(2, transacao.getValor());
+			pstm.setInt(3, transacao.getTipo().getValue());
 			pstm.setString(4, transacao.getContaOrigem() != null ? transacao.getContaOrigem().getNumeroConta() : null);
        		pstm.setString(5, transacao.getContaDestino() != null ? transacao.getContaDestino().getNumeroConta() : null);
        		pstm.setLong(6, transacao.getIdTransacao());
@@ -97,8 +96,8 @@ public class TransacaoDAO implements IEndityDAO<Transacao>{
 	                    transacao = new Transacao();
 	                    transacao.setIdTransacao(resultSet.getLong("id_transacao"));
 	                    transacao.setData(resultSet.getTimestamp("data").toLocalDateTime());
-//	                    transacao.setValor(resultSet.getBigDecimal("valor"));
-//	                    transacao.setTipo(TipoTransacao.getEnumFromValue(resultSet.getInt("tipo")));
+	                    transacao.setQuantia(resultSet.getBigDecimal("valor"));
+	                    transacao.setTipo(TipoTransacao.getEnumFromValue(resultSet.getInt("tipo")));
 	                    // As contas (origem/destino) precisariam ser carregadas separadamente
 	                }
 	            }
@@ -123,8 +122,8 @@ public class TransacaoDAO implements IEndityDAO<Transacao>{
                 Transacao transacao = new Transacao();
                 transacao.setIdTransacao(resultSet.getLong("id_transacao"));
                 transacao.setData(resultSet.getTimestamp("data").toLocalDateTime());
-//                transacao.setValor(resultSet.getBigDecimal("valor"));
-//                transacao.setTipo(TipoTransacao.getEnumFromValue(resultSet.getInt("tipo")));
+                transacao.setQuantia(resultSet.getBigDecimal("valor"));
+                transacao.setTipo(TipoTransacao.getEnumFromValue(resultSet.getInt("tipo")));
                 transacoes.add(transacao);
             }
         } catch (SQLException e) {
@@ -149,8 +148,8 @@ public class TransacaoDAO implements IEndityDAO<Transacao>{
                     Transacao transacao = new Transacao();
                     transacao.setIdTransacao(resultSet.getLong("id_transacao"));
                     transacao.setData(resultSet.getTimestamp("data").toLocalDateTime());
-//                    transacao.setValor(resultSet.getBigDecimal("valor"));
-//                    transacao.setTipo(TipoTransacao.getEnumFromValue(resultSet.getInt("tipo")));
+                    transacao.setQuantia(resultSet.getBigDecimal("valor"));
+                    transacao.setTipo(TipoTransacao.getEnumFromValue(resultSet.getInt("tipo")));
                     transacoes.add(transacao);
                 }
             }

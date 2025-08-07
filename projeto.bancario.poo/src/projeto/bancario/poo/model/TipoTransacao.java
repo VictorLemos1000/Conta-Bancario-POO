@@ -13,13 +13,13 @@ public enum TipoTransacao {
         this.valor = valor;
     }
 	
-	private int getValue() {
+	public int getValue() {
 		// TODO Auto-generated method stub
 		return this.valor;
 	}
 	
 	@SuppressWarnings("unused")
-	private static TipoTransacao getEnumFromValue(int valor) {
+	public static TipoTransacao getEnumFromValue(int valor) {
 		// TODO Auto-generated method stub
 		for (TipoTransacao tipo : TipoTransacao.values()) {
 			if (tipo.getValue() == valor) {

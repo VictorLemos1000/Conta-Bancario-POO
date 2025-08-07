@@ -1,5 +1,8 @@
 package projeto.bancario.poo.gui;
 
-public class ContaGUI {
+import javax.swing.JFrame;
 
+public class ContaGUI extends JFrame {
+
+	
 }

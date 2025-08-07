@@ -1,5 +1,8 @@
 package projeto.bancario.poo.gui;
 
-public class MenuPrincipal {
+import javax.swing.JFrame;
 
+public class MenuPrincipal extends JFrame {
+
+	
 }

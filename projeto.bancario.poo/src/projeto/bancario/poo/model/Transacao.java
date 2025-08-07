@@ -81,4 +81,11 @@ public class Transacao {
 		Transacao other = (Transacao) obj;
 		return Objects.equals(idTransacao, other.idTransacao);
 	}
+
+	public BigDecimal getValor() {
+		// TODO Auto-generated method stub
+		return getQuantia();
+	}
+
+	
 }
