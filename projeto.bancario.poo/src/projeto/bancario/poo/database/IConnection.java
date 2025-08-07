@@ -7,7 +7,7 @@ import projeto.bancario.poo.exception.DataBaseException;
 public interface IConnection {
 
 	public Connection getConnection(Connection connection) throws DataBaseException;
-	
 	public void closeConnection();
+	
 	public void criarDB();
 }

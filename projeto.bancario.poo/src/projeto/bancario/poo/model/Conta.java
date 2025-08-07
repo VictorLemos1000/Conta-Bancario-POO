@@ -12,7 +12,6 @@ import projeto.bancario.poo.exception.ContaInativaException;
 import projeto.bancario.poo.exception.OperacaoBancariaException;
 import projeto.bancario.poo.exception.QuantiaInvalidaException;
 import projeto.bancario.poo.exception.SaldoInsuficienteException;
-import projeto.bancario.poo.pojo.Transacao;
 
 /*
  * A classe conta ela está utilizando a propriedade generics que
@@ -31,8 +30,8 @@ import projeto.bancario.poo.pojo.Transacao;
  * 
  * Outro topico importante salientar a classe pai Conta també conhecida como Superclasse;
  */
-@SuppressWarnings("unused")
-public  class Conta<T extends Cliente> implements Serializable{
+@SuppressWarnings({ "unused", "serial", "rawtypes" })
+public abstract class Conta<T extends Cliente> implements Serializable{
 
 	private static final long serialVersonUID = 1L;
 	
@@ -46,13 +45,17 @@ public  class Conta<T extends Cliente> implements Serializable{
 	 * Especificação da herança este 2 atributos vão ser tratados nas
 	 * classes ContaPoupanca e COntaCorrente
 	 */
-	protected BigDecimal saldo; // O uso da classe BigDecimal é muito útil para sistemas financeiros.
-	protected String numeroConta;
+	private String numeroConta; // Atributo de identificação da classe.
+	private BigDecimal saldo; // O uso da classe BigDecimal é muito útil para sistemas financeiros.
 	
-	private boolean status;
 	private LocalDateTime dataConta; // LocalDateTime serve para definir a data e a hora que a conta foi criada.
+	private boolean status;
+
+	// Atributo de associação ao cliente.
+	private Cliente cliente;
 	
-	private List<Transacao> listaDeTransacao = new ArrayList<Transacao>();
+	// Lista de transações.
+	private List<Transacao> transacoes;
 	
 	// Referência de atributo de uma classe generica
 //	protected T cliente;
@@ -65,11 +68,21 @@ public  class Conta<T extends Cliente> implements Serializable{
 	}
 
 	// Construtor explícito
-	public Conta(BigDecimal saldo, boolean status, String numeroConta, LocalDateTime dataConta) {
-		this.saldo = BigDecimal.ZERO;
-		this.status = true;
+	public Conta(String numeroConta, Cliente cliente) {
+		if (numeroConta == null ||  numeroConta.isBlank()) {
+			throw new IllegalArgumentException(" O número da conta não pode estar vázio.");
+		}
+		
+		if (cliente == null) {
+			throw new IllegalArgumentException(" Conta de estar vinculada a um cliente");
+		}
+		
 		this.numeroConta = numeroConta;
+		this.saldo = BigDecimal.ZERO;
 		this.dataConta = LocalDateTime.now();
+		this.status = true;
+		this.cliente = cliente; 
+		this.transacoes = new ArrayList<>();
 	}
 	
 	/*
@@ -92,39 +105,13 @@ public  class Conta<T extends Cliente> implements Serializable{
 	}
 	
 	// Método de deposito da conta.
-	public void depositarQuantia(BigDecimal quantia) throws OperacaoBancariaException{
-		validacaoOperacional(quantia);
-		
-		this.saldo = this.saldo.add(quantia);
-	}
+	public abstract void depositarQuantia(BigDecimal quantia) throws OperacaoBancariaException;
 	
 	// Método para retirada de quntia da conta.
-	public void sacarQuantia(BigDecimal quantia) throws OperacaoBancariaException {
-		validacaoOperacional(quantia);
-		
-		if (this.saldo.compareTo(quantia) < 0) {			
-			throw new  SaldoInsuficienteException("\n Saque insuficiente para saque.");
-		}
-		this.saldo = saldo.subtract(quantia);
-	}
+	public abstract void sacarQuantia(BigDecimal quantia) throws OperacaoBancariaException;
 
 	// Método para tranferência de determinada quantia de uma conta bancaria.
-	@SuppressWarnings("rawtypes")
-	public void tranferirQuantia(Conta contaDestino, BigDecimal quntia) throws OperacaoBancariaException {
-		validacaoOperacional(quntia);
-		
-		if (!contaDestino.isStatus()) {
-			throw new ContaInativaException("\n Sua conta destino está inativa.");
-		}
-		
-		/* O método de saque está referenciando a realização de uma transferencia da
-		 * conta de origem.
-		 */
-		this.sacarQuantia(quntia);
-		
-		// O método de deposito está realizando uma ação da conta de destino.
-		contaDestino.depositarQuantia(quntia);
-	}
+	public abstract void tranferirQuantia(Conta contaDestino, BigDecimal quntia) throws OperacaoBancariaException;
 	
 	// Métodos geters e seters servem para atribuir e retornar valores a seus respectivos atributos.
 	public BigDecimal getSaldo() {
@@ -165,12 +152,21 @@ public  class Conta<T extends Cliente> implements Serializable{
 		return serialVersonUID;
 	}
 
-	public List<Transacao> getListaDeTransacao() {
-		return listaDeTransacao;
+	@SuppressWarnings("unchecked")
+	public List<Cliente> getCliente() {
+		return (List<Cliente>) cliente;
 	}
 
-	public void setListaDeTransacao(List<Transacao> listaDeTransacao) {
-		this.listaDeTransacao = listaDeTransacao;
+	public void setCliente(List<Cliente> cliente) {
+		this.cliente = (Cliente) cliente;
+	}
+
+	public List<Transacao> getTransacoes() {
+		return transacoes;
+	}
+
+	public void setTransacoes(List<Transacao> transacoes) {
+		this.transacoes = transacoes;
 	}
 
 	/*
@@ -180,10 +176,10 @@ public  class Conta<T extends Cliente> implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		return "Conta [saldo=" + saldo + ", status=" + status + ", numeroConta=" + numeroConta + ", dataConta="
-				+ dataConta + "]";
+		return "Conta [numeroConta=" + numeroConta + ", saldo=" + saldo + ", dataConta=" + dataConta + ", status="
+				+ status + ", cliente=" + cliente + ", transacoes=" + transacoes + "]";
 	}
-
+	
 	/*
 	 * O método hashCode cria um número único baseado no valor do objeto;
 	 * ou seja um valor único para o objeto, por exemplo um id, mas neste
@@ -208,5 +204,10 @@ public  class Conta<T extends Cliente> implements Serializable{
 			return false;
 		Conta other = (Conta) obj;
 		return Objects.equals(numeroConta, other.numeroConta);
+	}
+
+	public Object getService() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

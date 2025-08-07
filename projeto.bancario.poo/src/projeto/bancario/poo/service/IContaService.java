@@ -1,38 +1,17 @@
 package projeto.bancario.poo.service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import projeto.bancario.poo.exception.ContaNaoEncontradaException;
 import projeto.bancario.poo.exception.OperacaoBancariaException;
-import projeto.bancario.poo.model.Cliente;
 import projeto.bancario.poo.model.Conta;
-import projeto.bancario.poo.model.ContaCorrente;
-import projeto.bancario.poo.model.ContaPoupanca;
 
+@SuppressWarnings("rawtypes")
 public interface IContaService {
 
-    // Operações básicas
-    void depositar(String numeroConta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
-    void sacar(String numeroConta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
-    void transferir(String contaOrigem, String contaDestino, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
-    
-    // Gerenciamento de contas
-    ContaCorrente criarContaCorrente(Cliente<?> cliente, String numeroConta, BigDecimal saldoInicial, BigDecimal limiteChequeEspecial, BigDecimal taxaManutencao);
-    ContaPoupanca criarContaPoupanca(Cliente<?> cliente, String numeroConta, BigDecimal saldoInicial, BigDecimal taxaRendimento);
-    
-    void ativarConta(String numeroConta) throws ContaNaoEncontradaException;
-    void desativarConta(String numeroConta) throws ContaNaoEncontradaException;
-    
-    // Consultas
-    Conta<?> encontrarConta(String numeroConta) throws ContaNaoEncontradaException;
-    
-    List<Conta<?>> listarTodasAsContas();
-    
-    // Operações específicas
-    void aplicarRendimentoContaPoupanca();
-    
-    public void usarChequeEspecial(String numeroConta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
-    public void cobrarTaxaManutencao(String numeroConta) throws OperacaoBancariaException, ContaNaoEncontradaException;
-    public BigDecimal consultarLimiteChequeEspecial(String numeroConta) throws ContaNaoEncontradaException;
+	// Operações básicas
+	void sacarQuantia(Conta conta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
+    void depositarQuantia(Conta conta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
+    void transferirQuantia(Conta origem, Conta destino, BigDecimal valor) throws OperacaoBancariaException, ContaNaoEncontradaException;
+    BigDecimal consultarSaldo(Conta conta) throws OperacaoBancariaException, ContaNaoEncontradaException;
 }

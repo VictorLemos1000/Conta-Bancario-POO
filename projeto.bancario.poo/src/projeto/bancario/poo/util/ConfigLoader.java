@@ -27,7 +27,6 @@ public class ConfigLoader {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	public static String getValor(String chave) {
 		// TODO Auto-generated method stub
 		return PROP.getProperty(chave);

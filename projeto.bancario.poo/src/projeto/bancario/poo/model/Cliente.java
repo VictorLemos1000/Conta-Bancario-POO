@@ -1,6 +1,8 @@
 package projeto.bancario.poo.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,32 +17,30 @@ public class Cliente<T> implements Serializable{
 	
 	// Atributos necessário para a classe de um determinado cliente
 	private long id;
-	private String nome;
 	private String cpf;
-	private String endereco;
+	private String nome;
+	private LocalDateTime dataNascimento;
 	
-	private List<Conta<?>> contas = new ArrayList<>();
-	
-	// Referência de atributo de uma classe generica
-	protected T titular;
+	@SuppressWarnings("rawtypes")
+	private List<Conta> contas;
 	
 	// Construtor implícito
 	public Cliente() {
-		
+		this.dataNascimento = LocalDateTime.now();
 	}
 	
 	// Construtor explícito
-	public Cliente(String nome, String cpf, String endereco) {
+	public Cliente(String nome, String cpf, LocalDateTime dataNascimento) {
 		this.nome = nome;
 		this.cpf = cpf;
-		this.endereco = endereco;
-		this.contas = new ArrayList<Conta<?>>();
+		this.dataNascimento = dataNascimento;
+		this.contas = new ArrayList<>();
 	}
 	
 	/*
 	 * Caso a conta do usuário seja nula vai adicionado uma a conta ao arrayList de contas
 	 */
-	public void adicionarCliente(Conta<?> conta) {
+	public void adicionarCliente(@SuppressWarnings("rawtypes") Conta conta) {
 		if (conta == null) {
 			throw new IllegalArgumentException("\n A sua conta não pode ser nula.");
 		}
@@ -52,10 +52,10 @@ public class Cliente<T> implements Serializable{
 		return this.contas.removeIf(conta -> conta.getNumeroConta().equals(numeroConta));
 	}
 	
-	@SuppressWarnings("hiding")
-	public <T extends Conta<?>> T localizarCliente(String numeroConta, Class<T> tipoConta) throws ContaNaoEncontradaException{
+	@SuppressWarnings({ "hiding", "rawtypes" })
+	public <T extends Conta> T localizarCliente(String numeroConta, Class<T> tipoConta) throws ContaNaoEncontradaException{
 		
-		for (Conta<?> conta : contas) {
+		for (Conta conta : contas) {
 			if (conta.getNumeroConta().equals(numeroConta)) {
 				if (tipoConta.isInstance(conta)) {
 					return tipoConta.cast(conta);
@@ -83,30 +83,21 @@ public class Cliente<T> implements Serializable{
 		this.cpf = cpf;
 	}
 
-	public List<Conta<?>> getContas() {
+	@SuppressWarnings("rawtypes")
+	public List<Conta> getContas() {
 		return contas;
 	}
 
-	public void setContas(List<Conta<?>> contas) {
+	public void setContas(@SuppressWarnings("rawtypes") List<Conta> contas) {
 		this.contas = contas;
 	}
-	
-	
 
-	public String getEndereco() {
-		return endereco;
+	public LocalDateTime getDataNascimento() {
+		return dataNascimento;
 	}
 
-	public void setEndereco(String endereco) {
-		this.endereco = endereco;
-	}
-
-	public T getTitular() {
-		return titular;
-	}
-
-	public void setTitular(T titular) {
-		this.titular = titular;
+	public void setDataNascimento(LocalDateTime dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public static long getSerialversionuid() {
@@ -128,8 +119,7 @@ public class Cliente<T> implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", endereco=" + endereco + ", contas=" + contas + ", titular="
-				+ titular + "]";
+		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", dataNascimento=" + dataNascimento + ", contas=" + contas + "]";
 	}	
 
 	/*
@@ -157,5 +147,10 @@ public class Cliente<T> implements Serializable{
 			return false;
 		Cliente other = (Cliente) obj;
 		return Objects.equals(cpf, other.cpf);
+	}
+
+	public void setDataNascimento(LocalDate localDate) {
+		// TODO Auto-generated method stub
+		
 	}
 }
