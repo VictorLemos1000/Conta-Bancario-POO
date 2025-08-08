@@ -2,16 +2,15 @@ package projeto.bancario.poo.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import projeto.bancario.poo.exception.ContaInativaException;
+import projeto.bancario.poo.exception.ContaNaoEncontradaException;
 import projeto.bancario.poo.exception.OperacaoBancariaException;
 import projeto.bancario.poo.exception.QuantiaInvalidaException;
-import projeto.bancario.poo.exception.SaldoInsuficienteException;
 
 /*
  * A classe conta ela está utilizando a propriedade generics que
@@ -105,13 +104,13 @@ public abstract class Conta<T extends Cliente> implements Serializable{
 	}
 	
 	// Método de deposito da conta.
-	public abstract void depositarQuantia(BigDecimal quantia) throws OperacaoBancariaException;
+	public abstract void depositarQuantia(Conta conta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
 	
 	// Método para retirada de quntia da conta.
-	public abstract void sacarQuantia(BigDecimal quantia) throws OperacaoBancariaException;
+	public abstract void sacarQuantia(Conta conta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
 
 	// Método para tranferência de determinada quantia de uma conta bancaria.
-	public abstract void tranferirQuantia(Conta contaDestino, BigDecimal quntia) throws OperacaoBancariaException;
+	public abstract void transferirQuantia(Conta origem, Conta destino, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
 	
 	// Métodos geters e seters servem para atribuir e retornar valores a seus respectivos atributos.
 	public BigDecimal getSaldo() {

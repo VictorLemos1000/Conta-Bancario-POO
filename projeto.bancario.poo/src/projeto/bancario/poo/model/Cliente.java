@@ -111,6 +111,8 @@ public class Cliente<T> implements Serializable{
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+	
 
 	/*
 	 * O método toString ele evita que o programa exiba uma hash

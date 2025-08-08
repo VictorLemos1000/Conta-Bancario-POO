@@ -10,8 +10,5 @@ import projeto.bancario.poo.model.Conta;
 public interface IContaService {
 
 	// Operações básicas
-	void sacarQuantia(Conta conta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
-    void depositarQuantia(Conta conta, BigDecimal quantia) throws OperacaoBancariaException, ContaNaoEncontradaException;
-    void transferirQuantia(Conta origem, Conta destino, BigDecimal valor) throws OperacaoBancariaException, ContaNaoEncontradaException;
     BigDecimal consultarSaldo(Conta conta) throws OperacaoBancariaException, ContaNaoEncontradaException;
 }
